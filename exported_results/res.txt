@@ -1,4 +1,4 @@
-
+The program works in terminal (console version). The GUI  is under development. Please run the script with "menu.py"
 
 [20 19  5 18 38 38 12 30 24 46 27 19  3 44 36 36 26 49 39 28  8 48 14  3
   9 45  1 16 31 15 23 40  8 42  4 23 16 33 47 46 18  7 17 25 33 15 38  0

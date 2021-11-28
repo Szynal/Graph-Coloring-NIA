@@ -1,6 +1,17 @@
 # Graph-Coloring-NIA
 
+## Authors
+
+Paweł Szynal
+Kamil Zdeb
+
+## Dataset
+
+The dataset for testing (graphs) is stored in the "graphs" folder. With the help of the program you can generate a new data set ("graphs.py").
+
 ## Running 
+
+The program works in terminal (console version). The GUI  is under development. Please run the script with "menu.py"
 
 Running is really easy. The only thing you need is [Python 3](https://www.python.org/downloads/).
 
@@ -28,6 +39,7 @@ You'll find a `.py` file there, typically `main.py`. You can run it with the com
     python main.py
 
 Please note that the virtual environment must still be active for this to work.
+
 
 ## Using PySide2
 
