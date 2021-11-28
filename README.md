@@ -3,11 +3,12 @@
 ## Authors
 
 Paweł Szynal
+
 Kamil Zdeb
 
 ## Dataset
 
-The dataset for testing (graphs) is stored in the "graphs" folder. With the help of the program you can generate a new data set ("graphs.py").
+The dataset for testing (graphs) is stored in the "graphs" folder. You can generate new data for testing with a script ("graphs.py").
 
 ## Running 
 
