@@ -16,6 +16,20 @@ The program works in terminal (console version). The GUI  is under development. 
 
 Running is really easy. The only thing you need is [Python 3](https://www.python.org/downloads/).
 
+Python version required: 3.10
+
+```
+# On Mac / Linux:
+python3 -V
+# Getting Started
+sudo apt update && sudo apt upgrade -y
+# Install Python 3.10 on Ubuntu 20.04|18.04 using Apt Repo
+sudo apt install software-properties-common -y
+sudo add-apt-repository ppa:deadsnakes/ppa
+#Press Enter to continue.
+sudo apt install python3.10
+```
+
 Create a virtual environment via the command:
 
     python3 -m venv venv
