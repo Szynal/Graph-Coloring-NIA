@@ -59,6 +59,8 @@ class GeneticAlgorithm(Algorithm):
     def run_algorithm(self, iterations):
         for i in range(iterations):
             self.roulette_breeding(i)
+            if i%10==0 or i==iterations-1:
+                print("Iteracja {} Najlepszy osobnik:\nKara:{}\tLiczba kolorów:{}".format(i, self.population[0].penalty, self.population[0].score))
 
     def export_results(self, filename, parameters):
         try:
