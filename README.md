@@ -3,6 +3,7 @@
 ## Authors
 
 Paweł Szynal
+
 Kamil Zdeb
 
 ## Dataset
