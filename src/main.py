@@ -1,21 +1,31 @@
 #!/usr/bin/env python
 import sys
 
-from PyQt5.QtCore import QDateTime, Qt, QTimer
+from PyQt5.QtCore import QDateTime, Qt, QTimer, QUrl, QFileInfo
 from PyQt5.QtGui import QIcon
+from PyQt5.QtMultimedia import QMediaContent
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit,
                              QDial, QDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-                             QProgressBar, QPushButton, QRadioButton, QScrollBar, QSizePolicy,
+                             QProgressBar, QRadioButton, QScrollBar, QSizePolicy,
                              QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit,
-                             QVBoxLayout, QWidget)
+                             QVBoxLayout, QWidget, QMessageBox, QPushButton, QFileDialog)
 
 from src.gui.description import GUIProjectDescription
+from src.gui.error_message import GUIShowErrorMsg
+
+from graph import Graph
+from genetic_algorithm import GeneticAlgorithm
 
 
 class WidgetGallery(QDialog):
     version = "v1.0"
     window_title = "Graph-Coloring-NIA "
     style = "Fusion"
+
+    filename = ""
+    default_graph = "graphs/projekt0_n50_m854.graph"
+    alg = ""
+    graph = ""
 
     def __init__(self, parent=None):
         super(WidgetGallery, self).__init__(parent)
@@ -64,7 +74,7 @@ class WidgetGallery(QDialog):
     def change_palette(self):
         QApplication.setPalette(self.originalPalette)
 
-    def advance_progress_bar(self):
+    def init_progress_bar(self):
         progress_bar_cur_val = self.progressBar.value()
         progress_bar_max_val = self.progressBar.maximum()
         self.progressBar.setValue(progress_bar_cur_val + (progress_bar_max_val - progress_bar_cur_val) // 100)
@@ -86,10 +96,53 @@ class WidgetGallery(QDialog):
         generate_dataset_button = QPushButton("Generate a dataset")
         generate_dataset_button.setDefault(True)
 
+        load_graph_button = QPushButton("Load the graph")
+        load_graph_button.setDefault(True)
+
+        print_graph_button = QPushButton("Print the graph")
+        print_graph_button.setDefault(True)
+
+        run_genetic_alg_button = QPushButton("Run Genetic Algorithm")
+        run_genetic_alg_button.setDefault(True)
+
         layout = QVBoxLayout()
         layout.addWidget(generate_dataset_button)
+        layout.addWidget(load_graph_button)
+        layout.addWidget(print_graph_button)
+        layout.addWidget(run_genetic_alg_button)
+
+        load_graph_button.clicked.connect(self.load_graph_button_clicked)
+        print_graph_button.clicked.connect(self.print_graph_buton_clicked)
+        run_genetic_alg_button.clicked.connect(self.run_genetic_alg_button_clicked)
+
         layout.addStretch(1)
         self.topRightGroupBox.setLayout(layout)
+
+    def load_graph_button_clicked(self):
+
+        try:
+            self.filename, _ = QFileDialog.getOpenFileName(self, "Load graph", "./graphs", "Graph Files (*.graph)")
+            print(self.filename)
+
+            self.graph = Graph(self.filename)
+
+            if self.filename == "":
+                self.filename = self.default_graph
+
+            QMessageBox.information(self, 'Message', "The graph has been loaded correctly")
+
+        except FileNotFoundError:
+            QMessageBox.exec(self)
+
+    def print_graph_buton_clicked(self):
+
+        if self.graph is None:
+            GUIShowErrorMsg.show_error_msg('Error', "Graph not found. Load the graph to display it properly.")
+        else:
+            print(self.graph)
+
+    def run_genetic_alg_button_clicked(self):
+        raise NotImplementedError
 
     def create_description_widget(self):
         self.bottomLeftTabWidget.setSizePolicy(QSizePolicy.Preferred,
@@ -146,7 +199,7 @@ class WidgetGallery(QDialog):
         self.progressBar.setValue(0)
 
         timer = QTimer(self)
-        timer.timeout.connect(self.advance_progress_bar)
+        timer.timeout.connect(self.init_progress_bar)
         timer.start(1000)
 
 
