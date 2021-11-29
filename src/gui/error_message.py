@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMessageBox
 
 
-class GUIShowErrorMsg(object):
+class GuiShowErrorMsg(object):
 
     @staticmethod
     def show_error_msg(text="Error", info_text="inf"):
