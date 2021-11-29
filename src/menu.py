@@ -1,13 +1,13 @@
 from graph import Graph
-from individual import Individual
 from genetic_algorithm import GeneticAlgorithm
-import numpy as np
+
 
 def main():
     menu()
 
+
 def menu():
-    alg=""
+    alg = ""
     graph = ""
     choice = 0
     prompt = 'MENU\tWybierz opcję:\n1.Wczytaj graf\n2.Wyświetl graf\n3.Algorytm referencyjny(TODO)\n4.Algorytm genetyczny\n5.Wyeksportuj wyniki\n6.Wyjście\n'
@@ -20,7 +20,7 @@ def menu():
             case 1:
                 filename = input("Podaj nazwę pliku z grafem (domyślnie=graphs/projekt0_n50_m854.graph)")
                 if filename == "":
-                    filename="graphs/projekt0_n50_m854.graph"
+                    filename = "graphs/projekt0_n50_m854.graph"
                 try:
                     graph = Graph(filename)
                 except FileNotFoundError:
@@ -40,13 +40,15 @@ def menu():
                 alg.generate_population(population_size)
                 alg.run_algorithm(number_of_generations)
             case 5:
-                if(alg!=""):
-                    alg.export_results(input("Podaj nazwę pliku, do którego chcesz zapisać wyniki (w katalogu exported_results):"), "")
+                if (alg != ""):
+                    alg.export_results(
+                        input("Podaj nazwę pliku, do którego chcesz zapisać wyniki (w katalogu exported_results):"), "")
                 else:
                     print("Najpierw należy uruchomić algorytm")
             case 6:
                 break
         print("\n")
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
