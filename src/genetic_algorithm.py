@@ -3,6 +3,7 @@ from individual import Individual
 from math import ceil, floor
 import random
 
+
 class GeneticAlgorithm(Algorithm):
     def __init__(self, graph):
         self.type = "Genetyczny"
@@ -29,7 +30,7 @@ class GeneticAlgorithm(Algorithm):
             new_population.append(self.population[i])
         for individual in self.population:
             total_penalty += self.graph.nodes - individual.penalty
-        for i in range(round(bred_size/2)):
+        for i in range(round(bred_size / 2)):
             found = [False, False]
             selected_value = [random.randint(0, total_penalty), random.randint(0, total_penalty)]
             parents = []
@@ -38,10 +39,10 @@ class GeneticAlgorithm(Algorithm):
                 selected_value[1] -= self.graph.nodes - individual.penalty
                 if not found[0] and selected_value[0] <= 0:
                     parents.append(individual)
-                    found[0]=True
+                    found[0] = True
                 if not found[1] and selected_value[1] <= 0:
                     parents.append(individual)
-                    found[1]=True
+                    found[1] = True
                 if found[0] and found[1]:
                     break
             ind_a = Individual(self.graph)
@@ -59,12 +60,13 @@ class GeneticAlgorithm(Algorithm):
     def run_algorithm(self, iterations):
         for i in range(iterations):
             self.roulette_breeding(i)
-            if i%10==0 or i==iterations-1:
-                print("Iteracja {} Najlepszy osobnik:\nKara:{}\tLiczba kolorów:{}".format(i, self.population[0].penalty, self.population[0].score))
+            if i % 10 == 0 or i == iterations - 1:
+                print("Iteracja {} Najlepszy osobnik:\nKara:{}\tLiczba kolorów:{}".format(i, self.population[0].penalty,
+                                                                                          self.population[0].score))
 
     def export_results(self, filename, parameters):
         try:
-            with open("exported_results/"+filename, 'w+') as f:
+            with open("exported_results/" + filename, 'w+') as f:
                 if parameters != "":
                     for x, y in parameters.items():
                         f.write("{}: {}\n".format(x, y))
