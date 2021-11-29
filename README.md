@@ -48,6 +48,11 @@ With the deadsnakes repository added to your Ubuntu 20.04|18.04 system, now down
 ```
 sudo apt install python3.10
 ```
+Python base interpreter does require some additional modules so install 
+```
+sudo apt install python3.10-distutils
+```
+
 
 
 Create a virtual environment via the command:
