@@ -1,4 +1,4 @@
 fbs==0.8.3
 PyQt5==5.12.3
-requests
-numpy
+requests==2.26.0
+numpy==1.21.4
