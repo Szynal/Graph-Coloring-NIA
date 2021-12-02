@@ -60,4 +60,5 @@ class Individual:
     def generate_tag(self):
         self.tag = 0
         for i in range(len(self.genotype)):
-            self.tag += int(self.genotype[i]) * 2 ** (len(self.genotype) - i - 1)
+            self.tag += int(self.genotype[i]) * 2 ** (len(self.genotype)
+                                                      - i - 1)

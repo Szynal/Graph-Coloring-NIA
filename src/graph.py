@@ -18,5 +18,6 @@ class Graph:
         self.number_of_edges = np.count_nonzero(self.edges)
 
     def __str__(self):
-        return "Krawędzie:\n{}\nLiczba wierzchołków: {}\nLiczba krawędzi: {}\n".format(self.edges, self.nodes,
-                                                                                       self.number_of_edges)
+        return "Krawędzie:\n{}\nLiczba wierzchołków: {}"\
+               "\nLiczba krawędzi: {}\n".format(self.edges, self.nodes,
+                                                self.number_of_edges)

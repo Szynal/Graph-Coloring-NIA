@@ -32,7 +32,8 @@ class GeneticAlgorithm(Algorithm):
             total_penalty += self.graph.nodes - individual.penalty
         for i in range(round(bred_size / 2)):
             found = [False, False]
-            selected_value = [random.randint(0, total_penalty), random.randint(0, total_penalty)]
+            selected_value = [random.randint(0, total_penalty),
+                              random.randint(0, total_penalty)]
             parents = []
             for individual in self.population:
                 selected_value[0] -= self.graph.nodes - individual.penalty
@@ -61,8 +62,9 @@ class GeneticAlgorithm(Algorithm):
         for i in range(iterations):
             self.roulette_breeding(i)
             if i % 10 == 0 or i == iterations - 1:
-                print("Iteracja {} Najlepszy osobnik:\nKara:{}\tLiczba kolorów:{}".format(i, self.population[0].penalty,
-                                                                                          self.population[0].score))
+                print(f"Iteracja {i} - najlepszy osobnik:\nKara:"
+                      f"{self.population[0].penalty}\tLiczba kolorów:"
+                      f"{self.population[0].score}")
 
     def export_results(self, filename, parameters):
         try:
