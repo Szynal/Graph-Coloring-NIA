@@ -1,6 +1,9 @@
 from algorithm import Algorithm
 from individual import Individual
 from math import ceil, floor
+from matplotlib import pyplot as plt
+from pathlib import Path
+from datetime import datetime
 import random
 
 
@@ -9,6 +12,8 @@ class GeneticAlgorithm(Algorithm):
         self.type = "Genetyczny"
         self.population = []
         self.graph = graph
+        self.lowest_penalties = []
+        self.best_scores = []
 
     def generate_population(self, size):
         for i in range(size):
@@ -65,6 +70,22 @@ class GeneticAlgorithm(Algorithm):
                 print(f"Iteracja {i} - najlepszy osobnik:\nKara:"
                       f"{self.population[0].penalty}\tLiczba kolorów:"
                       f"{self.population[0].score}")
+            self.best_scores.append(self.population[0].score)
+            self.lowest_penalties.append(self.population[0].penalty)
+
+    def save_charts(self):
+        fig, ax = plt.subplots(2, 1)
+        ax[0].set_title(f"Graf o liczbie wierzchołków: {self.graph.nodes}"
+                        f" i liczbie krawędzi: {self.graph.number_of_edges}")
+        ax[0].plot(self.best_scores)
+        ax[0].set_xlabel("Liczba iteracji")
+        ax[0].set_ylabel("Liczba kolorów")
+        ax[1].set_xlabel("Liczba iteracji")
+        ax[0].set_ylabel("Liczba punktów karnych")
+        ax[1].plot(self.lowest_penalties)
+        filename = str(Path(__file__).parent.parent)+ \
+        (f"/saved_charts/{str(datetime.now())}.png")
+        fig.savefig(filename)
 
     def export_results(self, filename, parameters):
         try:

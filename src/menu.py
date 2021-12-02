@@ -12,7 +12,7 @@ def menu():
     choice = 0
     prompt = "MENU\tWybierz opcję:\n1.Wczytaj graf\n2.Wyświetl graf\n" \
              "3.Algorytm referencyjny(TODO)\n4.Algorytm genetyczny\n" \
-             "5.Wyeksportuj wyniki\n6.Wyjście\n"
+             "5.Wyeksportuj wyniki\n6.Wyeksportuj wykresy\n7.Wyjście\n"
     while True:
         try:
             choice = int(input(prompt))
@@ -54,6 +54,12 @@ def menu():
                 else:
                     print("Najpierw należy uruchomić algorytm")
             case 6:
+                if (alg != ""):
+                    alg.save_charts()
+                else:
+                    print("Najpierw należy uruchomić algorytm")
+
+            case 7:
                 break
         print("\n")
 
