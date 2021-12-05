@@ -1,5 +1,6 @@
 from graph import Graph
 from genetic_algorithm import GeneticAlgorithm
+from brute_force_algorithm import BruteForceAlgorithm
 
 
 def main():
@@ -31,6 +32,12 @@ def menu():
                     print('Nie znaleziono pliku o podanej nazwie!')
             case 2:
                 print(graph)
+            case 3:
+                try:
+                    alg = BruteForceAlgorithm(graph)
+                    alg.run_algorithm()
+                except AttributeError:
+                    print("Należy najpierw wczytać graf!")
             case 4:
                 alg = GeneticAlgorithm(graph)
                 try:
@@ -43,8 +50,11 @@ def menu():
                         "Podaj liczbę pokoleń (domyślnie=50): "))
                 except ValueError:
                     number_of_generations = 50
-                alg.generate_population(population_size)
-                alg.run_algorithm(number_of_generations)
+                try:
+                    alg.generate_population(population_size)
+                    alg.run_algorithm(number_of_generations)
+                except AttributeError:
+                    print("Należy najpierw wczytać graf!")
             case 5:
                 if (alg != ""):
                     alg.export_results(input("Podaj nazwę pliku,"
@@ -52,16 +62,15 @@ def menu():
                                              "(w katalogu exported_results):"),
                                        "")
                 else:
-                    print("Najpierw należy uruchomić algorytm")
+                    print("Najpierw należy uruchomić algorytm!")
             case 6:
                 if (alg != ""):
                     alg.save_charts()
                 else:
-                    print("Najpierw należy uruchomić algorytm")
+                    print("Najpierw należy uruchomić algorytm!")
 
             case 7:
                 break
-        print("\n")
 
 
 if __name__ == "__main__":

@@ -9,11 +9,21 @@ import random
 
 class GeneticAlgorithm(Algorithm):
     def __init__(self, graph):
-        self.type = "Genetyczny"
-        self.population = []
+        self.best_scores = []
         self.graph = graph
         self.lowest_penalties = []
-        self.best_scores = []
+        self.population = []
+        self.type = "Genetyczny"
+
+    def __repr__(self):
+        if len(self.best_scores) == 0 or len(self.lowest_penalties) == 0:
+            return f"GeneticAlgorithm({self.best_scores}, "\
+                   f"'{self.graph.name}', {self.lowest_penalties[-1]}, "\
+                   f" '{self.type}')"
+        else:
+            return f"GeneticAlgorithm({self.best_scores[-1]}, "\
+                   f"'{self.graph.name}', {self.lowest_penalties[-1]}, "\
+                   f"'{self.type}')"
 
     def generate_population(self, size):
         for i in range(size):
@@ -81,11 +91,12 @@ class GeneticAlgorithm(Algorithm):
         ax[0].set_xlabel("Liczba iteracji")
         ax[0].set_ylabel("Liczba kolorów")
         ax[1].set_xlabel("Liczba iteracji")
-        ax[0].set_ylabel("Liczba punktów karnych")
+        ax[1].set_ylabel("Liczba punktów karnych")
         ax[1].plot(self.lowest_penalties)
-        filename = str(Path(__file__).parent.parent)+ \
-        (f"/saved_charts/{str(datetime.now())}.png")
+        filename = str(Path(__file__).parent.parent) + \
+            (f"/saved_charts/{str(datetime.now())}.png")
         fig.savefig(filename)
+        print(f"Wyeksportowano wykres do '{filename}'.")
 
     def export_results(self, filename, parameters):
         try:
@@ -95,8 +106,9 @@ class GeneticAlgorithm(Algorithm):
                         f.write("{}: {}\n".format(x, y))
                 f.write("\n\n")
                 for individual in self.population:
-                    f.write(individual.__repr__())
+                    f.write(str(individual))
                     f.write('\n')
+            print(f"Wyeksportowano wyniki do 'exported_results/{filename}'.")
             return True
         except NotADirectoryError and FileNotFoundError:
             return False

@@ -5,6 +5,7 @@ class Graph:
     def __init__(self, filename):
         with open(filename, 'r') as file:
             lines = file.readlines()
+        self.name = filename
         self.nodes = int(lines[0])
         self.edges = np.zeros((self.nodes, self.nodes))
         for i, line in enumerate(lines):
@@ -16,8 +17,12 @@ class Graph:
                 if word != '0':
                     self.edges[i - 1][int(word) - 1] = 1
         self.number_of_edges = np.count_nonzero(self.edges)
+        print(f"Wczytano graf '{filename}'.")
 
     def __str__(self):
         return "Krawędzie:\n{}\nLiczba wierzchołków: {}"\
                "\nLiczba krawędzi: {}\n".format(self.edges, self.nodes,
                                                 self.number_of_edges)
+
+    def __repr__(self):
+        return f"Graph({self.nodes}, {self.edges}, {self.number_of_edges})"

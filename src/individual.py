@@ -4,16 +4,13 @@ import numpy as np
 
 class Individual:
     def __init__(self, graph):
-        self.genotype = np.arange(start=0, stop=graph.nodes, step=1)
+        self.genotype = np.zeros(graph.nodes)
         self.penalty = 0
         self.score = 0
         self.iteration = 0
         self.tag = 0
 
-    def __str__(self):
-        return "{}\n{}".format(self.genotype, self.score)
-
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         representation = ""
         representation += "{}\n".format(self.genotype)
         representation += "Tag: {}\n".format(hex(self.tag))
@@ -21,6 +18,10 @@ class Individual:
         representation += "Penalty: {}\n".format(self.penalty)
         representation += "Score: {}\n".format(self.score)
         return representation
+
+    def __repr__(self):
+        return f"Individual({self.genotype}, {self.penalty}, {self.score}, \
+        {self.iteration}, {self.tag})"
 
     def generate_genotype(self, graph):
         colors = 0
@@ -40,6 +41,7 @@ class Individual:
                 if (graph.edges[i][j] == 1
                         and self.genotype[i] == self.genotype[j]):
                     self.penalty += 1
+        self.score = len(np.unique(self.genotype))
 
     def breeding(self, ind_a, ind_b, graph):
         for i in range(len(self.genotype)):
@@ -50,7 +52,6 @@ class Individual:
         self.mutate()
         self.correct_genotype(graph)
         self.generate_tag()
-        self.score = len(np.unique(self.genotype))
 
     def mutate(self):
         for i in range(len(self.genotype)):
