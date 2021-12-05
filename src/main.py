@@ -3,11 +3,13 @@ import sys
 
 from PyQt5.QtCore import QDateTime, Qt, QTimer
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QApplication, QComboBox, QDateTimeEdit,
-                             QDial, QDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-                             QProgressBar, QRadioButton, QScrollBar, QSizePolicy,
-                             QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit,
-                             QVBoxLayout, QWidget, QMessageBox, QPushButton, QFileDialog)
+from PyQt5.QtWidgets import (QApplication, QComboBox, QDateTimeEdit, QDial,
+                             QDialog, QGridLayout, QGroupBox, QHBoxLayout,
+                             QLabel, QLineEdit, QProgressBar, QRadioButton,
+                             QScrollBar, QSizePolicy, QSlider, QSpinBox,
+                             QStyleFactory, QTableWidget, QTabWidget,
+                             QTextEdit, QVBoxLayout, QWidget, QMessageBox,
+                             QPushButton, QFileDialog)
 
 from src.gui.description import GuiProjectDescription
 from src.gui.error_message import GuiShowErrorMsg
@@ -91,7 +93,8 @@ class WidgetGallery(QDialog):
     def init_progress_bar(self):
         progress_bar_cur_val = self.progress_bar.value()
         progress_bar_max_val = self.progress_bar.maximum()
-        self.progress_bar.setValue(progress_bar_cur_val + (progress_bar_max_val - progress_bar_cur_val) // 100)
+        self.progress_bar.setValue(progress_bar_cur_val + (progress_bar_max_val
+                                   - progress_bar_cur_val) // 100)
 
     def create_dataset_group_box(self):
         generate_dataset_button = QPushButton("Generate a dataset")
@@ -135,7 +138,8 @@ class WidgetGallery(QDialog):
         layout = QVBoxLayout()
         layout.addWidget(run_genetic_alg_button)
 
-        run_genetic_alg_button.clicked.connect(self.run_genetic_alg_button_clicked)
+        run_genetic_alg_button.clicked.connect(
+                                        self.run_genetic_alg_button_clicked)
 
         layout.addStretch(1)
         self.buttons_group_box.setLayout(layout)
@@ -143,7 +147,8 @@ class WidgetGallery(QDialog):
     def load_graph_button_clicked(self):
 
         try:
-            self.filename, _ = QFileDialog.getOpenFileName(self, "Load graph", "./graphs", "Graph Files (*.graph)")
+            self.filename, _ = QFileDialog.getOpenFileName(
+                self, "Load graph", "./graphs", "Graph Files (*.graph)")
             print(self.filename)
 
             self.graph = Graph(self.filename)
@@ -151,7 +156,8 @@ class WidgetGallery(QDialog):
             if self.filename == "":
                 self.filename = self.default_graph
 
-            QMessageBox.information(self, 'Message', "The graph has been loaded correctly")
+            QMessageBox.information(
+                self, 'Message', "The graph has been loaded correctly")
 
         except FileNotFoundError:
             QMessageBox.exec(self)
@@ -159,29 +165,36 @@ class WidgetGallery(QDialog):
     def print_graph_button_clicked(self):
 
         if self.graph is None:
-            GuiShowErrorMsg.show_error_msg('Error', "Graph not found. Load the graph to display it properly.")
+            GuiShowErrorMsg.show_error_msg(
+                'Error', "Graph not found. Load the graph to display it"
+                " properly.")
         else:
             GuiConsole.append_test_to_console(self, self.console, self.graph)
 
     def run_genetic_alg_button_clicked(self):
 
         if self.graph is None:
-            GuiShowErrorMsg.show_error_msg('Error', "Graph not found. Load the graph to display it properly.")
+            GuiShowErrorMsg.show_error_msg(
+                'Error', "Graph not found. Load the graph to display it"
+                " properly.")
         else:
             alg = GeneticAlgorithm(self.graph)
             try:
-                population_size = int(input("Podaj rozmiar populacji (domyślnie=100): "))
+                population_size = int(input(
+                    "Podaj rozmiar populacji (domyślnie=100): "))
             except ValueError:
                 population_size = 100
             try:
-                number_of_generations = int(input("Podaj liczbę pokoleń (domyślnie=50): "))
+                number_of_generations = int(input(
+                    "Podaj liczbę pokoleń (domyślnie=50): "))
             except ValueError:
                 number_of_generations = 50
             alg.generate_population(population_size)
             alg.run_algorithm(number_of_generations)
 
     def create_description_widget(self):
-        self.tab_widget_group_box.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Ignored)
+        self.tab_widget_group_box.setSizePolicy(
+            QSizePolicy.Preferred, QSizePolicy.Ignored)
         tab2 = QWidget()
         text_edit = QTextEdit()
         text_edit.setPlainText(GuiProjectDescription.get_project_description())

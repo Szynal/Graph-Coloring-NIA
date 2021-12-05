@@ -130,5 +130,5 @@ dmypy.json
 
 # Our project
 saved_charts/*.png
-exported_results/*.png
+exported_results/*.txt
 src/temp.py
