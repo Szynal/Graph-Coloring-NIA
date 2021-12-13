@@ -25,16 +25,18 @@ class WidgetGallery(QDialog):
     filename = ""
     default_graph = "graphs/projekt0_n50_m854.graph"
     alg = ""
-    graph = ""
+    graph = None
 
     console = None
+    population_size_box = None
+    number_of_generations_box = None
 
     def __init__(self, parent=None):
         super(WidgetGallery, self).__init__(parent)
 
         self.dataset_group_box = QGroupBox("Dataset")
         self.radio_buttons_group_box = QGroupBox("Choose algorithm")
-        self.buttons_group_box = QGroupBox("")
+        self.genetic_alg_group_box = QGroupBox("Genetic Algorithm")
         self.tab_widget_group_box = QTabWidget()
         self.console_group_box = QTabWidget()
         self.original_palette = QApplication.palette()
@@ -65,7 +67,7 @@ class WidgetGallery(QDialog):
         main_layout.addWidget(self.dataset_group_box, 2, 0)
         main_layout.addWidget(self.bottomRightGroupBox, 2, 1)
         main_layout.addWidget(self.radio_buttons_group_box, 3, 0)
-        main_layout.addWidget(self.buttons_group_box, 3, 1)
+        main_layout.addWidget(self.genetic_alg_group_box, 3, 1)
         main_layout.addWidget(self.progress_bar, 4, 0, 1, 2)
         main_layout.addWidget(self.console_group_box, 5, 0, 1, 2)
         main_layout.addWidget(self.console_group_box, 0, 0, 1, 2)
@@ -132,13 +134,34 @@ class WidgetGallery(QDialog):
         run_genetic_alg_button = QPushButton("Run Genetic Algorithm")
         run_genetic_alg_button.setDefault(True)
 
-        layout = QVBoxLayout()
-        layout.addWidget(run_genetic_alg_button)
+        population_size_label = QLabel(self.genetic_alg_group_box)
+        population_size_label.setText("Population size:")
+
+        self.population_size_box = QSpinBox(self.genetic_alg_group_box)
+        self.population_size_box.setMinimum(10)
+        self.population_size_box.setMaximum(100000)
+        self.population_size_box.setValue(100)
+
+        number_of_generations_label = QLabel(self.genetic_alg_group_box)
+        number_of_generations_label.setText("Number of generations:")
+
+        self.number_of_generations_box = QSpinBox(self.genetic_alg_group_box)
+        self.number_of_generations_box.setMinimum(10)
+        self.number_of_generations_box.setMaximum(100000)
+        self.number_of_generations_box.setValue(50)
+
+        layout = QGridLayout()
+        layout.addWidget(population_size_label, 0, 0, 1, 2)
+        layout.addWidget(self.population_size_box, 0, 1, 1, 2)
+
+        layout.addWidget(number_of_generations_label, 1, 0, 1, 2)
+        layout.addWidget(self.number_of_generations_box, 1, 1, 1, 2)
+
+        layout.addWidget(run_genetic_alg_button, 2, 0)
+        layout.setRowStretch(3, 1)
 
         run_genetic_alg_button.clicked.connect(self.run_genetic_alg_button_clicked)
-
-        layout.addStretch(1)
-        self.buttons_group_box.setLayout(layout)
+        self.genetic_alg_group_box.setLayout(layout)
 
     def load_graph_button_clicked(self):
 
@@ -170,11 +193,11 @@ class WidgetGallery(QDialog):
         else:
             alg = GeneticAlgorithm(self.graph)
             try:
-                population_size = int(input("Podaj rozmiar populacji (domyślnie=100): "))
+                population_size = int(self.population_size_box.value())
             except ValueError:
                 population_size = 100
             try:
-                number_of_generations = int(input("Podaj liczbę pokoleń (domyślnie=50): "))
+                number_of_generations = int(self.number_of_generations_box.value())
             except ValueError:
                 number_of_generations = 50
             alg.generate_population(population_size)
@@ -202,12 +225,9 @@ class WidgetGallery(QDialog):
         self.tab_widget_group_box.addTab(authors_widget, "Authors")
 
     def createBottomRightGroupBox(self):
-        self.bottomRightGroupBox = QGroupBox("Group 3")
+        self.bottomRightGroupBox = QGroupBox("TODO TEST")
         self.bottomRightGroupBox.setCheckable(True)
         self.bottomRightGroupBox.setChecked(True)
-
-        lineEdit = QLineEdit('s3cRe7')
-        lineEdit.setEchoMode(QLineEdit.Password)
 
         spin_box = QSpinBox(self.bottomRightGroupBox)
         spin_box.setValue(50)
@@ -226,13 +246,12 @@ class WidgetGallery(QDialog):
         dial.setNotchesVisible(True)
 
         layout = QGridLayout()
-        layout.addWidget(lineEdit, 0, 0, 1, 2)
-        layout.addWidget(spin_box, 1, 0, 1, 2)
-        layout.addWidget(date_time_edit, 2, 0, 1, 2)
-        layout.addWidget(slider, 3, 0)
-        layout.addWidget(scroll_bar, 4, 0)
-        layout.addWidget(dial, 3, 1, 2, 1)
-        layout.setRowStretch(5, 1)
+        layout.addWidget(spin_box, 0, 0, 1, 2)
+        layout.addWidget(date_time_edit, 1, 0, 1, 2)
+        layout.addWidget(slider, 2, 0)
+        layout.addWidget(scroll_bar, 3, 0)
+        layout.addWidget(dial, 2, 1, 2, 1)
+        layout.setRowStretch(4, 1)
         self.bottomRightGroupBox.setLayout(layout)
 
     def createProgressBar(self):
