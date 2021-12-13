@@ -225,7 +225,7 @@ class WidgetGallery(QDialog):
         self.tab_widget_group_box.addTab(authors_widget, "Authors")
 
     def createBottomRightGroupBox(self):
-        self.bottomRightGroupBox = QGroupBox("TODO TEST")
+        self.bottomRightGroupBox = QGroupBox("TODO  asd TEST")
         self.bottomRightGroupBox.setCheckable(True)
         self.bottomRightGroupBox.setChecked(True)
 
