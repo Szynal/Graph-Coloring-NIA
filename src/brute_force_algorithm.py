@@ -43,4 +43,5 @@ class BruteForceAlgorithm(Algorithm):
                             and solution.score < self.best_solution.score):
                     self.best_solution = deepcopy(solution)
             i += 1
-        GuiConsole.append_test_to_console(self, console=console, text=self.best_solution)
+        GuiConsole.append_test_to_console(self, console=console, text=self.best_solution.genotype)
+        GuiConsole.append_test_to_console(self, console=console, text=f"score: {self.best_solution.score}")

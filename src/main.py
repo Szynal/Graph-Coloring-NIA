@@ -97,8 +97,8 @@ class WidgetGallery(QDialog):
         QApplication.setPalette(self.original_palette)
 
     def create_dataset_group_box(self):
-        generate_dataset_button = QPushButton("Generate a dataset")
-        generate_dataset_button.setDefault(True)
+        # generate_dataset_button = QPushButton("Generate a dataset")
+        # generate_dataset_button.setDefault(True)
 
         load_graph_button = QPushButton("Load the graph")
         load_graph_button.setDefault(True)
@@ -107,7 +107,7 @@ class WidgetGallery(QDialog):
         print_graph_button.setDefault(True)
 
         layout = QVBoxLayout()
-        layout.addWidget(generate_dataset_button)
+        # layout.addWidget(generate_dataset_button)
         layout.addWidget(load_graph_button)
         layout.addWidget(print_graph_button)
 
@@ -237,9 +237,9 @@ class WidgetGallery(QDialog):
         brute_force_algorithm.run_algorithm(self.console)
 
     def createBottomRightGroupBox(self):
-        self.bottomRightGroupBox = QGroupBox("TODO  asd TEST")
+        self.bottomRightGroupBox = QGroupBox("TODO  eksportowanie danych")
         self.bottomRightGroupBox.setCheckable(True)
-        self.bottomRightGroupBox.setChecked(True)
+        self.bottomRightGroupBox.setChecked(False)
 
         spin_box = QSpinBox(self.bottomRightGroupBox)
         spin_box.setValue(50)
