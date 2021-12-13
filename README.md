@@ -82,7 +82,7 @@ Please note that the virtual environment must still be active for this to work.
 
 ## Preview Images:
 
-![Alt text](other/app.jpg?raw=true "Title")
+![Alt text](other/app.png?raw=true "Title")
 
 ## Using PySide2
 
