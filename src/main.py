@@ -9,9 +9,9 @@ from PyQt5.QtWidgets import (QApplication, QComboBox, QDateTimeEdit,
                              QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit,
                              QVBoxLayout, QWidget, QMessageBox, QPushButton, QFileDialog)
 
-from src.gui.description import GuiProjectDescription
-from src.gui.error_message import GuiShowErrorMsg
-from src.gui.console import GuiConsole
+from gui.description import GuiProjectDescription
+from gui.error_message import GuiShowErrorMsg
+from gui.console import GuiConsole
 
 from graph import Graph
 from genetic_algorithm import GeneticAlgorithm
@@ -200,8 +200,9 @@ class WidgetGallery(QDialog):
                 number_of_generations = int(self.number_of_generations_box.value())
             except ValueError:
                 number_of_generations = 50
+            self.console.clear()
             alg.generate_population(population_size)
-            alg.run_algorithm(number_of_generations)
+            alg.run_algorithm(number_of_generations, self.console)
 
     def create_description_widget(self):
         self.tab_widget_group_box.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Ignored)

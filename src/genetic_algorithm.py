@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from pathlib import Path
 from datetime import datetime
 import random
+from gui.console import GuiConsole
 
 
 class GeneticAlgorithm(Algorithm):
@@ -17,12 +18,12 @@ class GeneticAlgorithm(Algorithm):
 
     def __repr__(self):
         if len(self.best_scores) == 0 or len(self.lowest_penalties) == 0:
-            return f"GeneticAlgorithm({self.best_scores}, "\
-                   f"'{self.graph.name}', {self.lowest_penalties[-1]}, "\
+            return f"GeneticAlgorithm({self.best_scores}, " \
+                   f"'{self.graph.name}', {self.lowest_penalties[-1]}, " \
                    f" '{self.type}')"
         else:
-            return f"GeneticAlgorithm({self.best_scores[-1]}, "\
-                   f"'{self.graph.name}', {self.lowest_penalties[-1]}, "\
+            return f"GeneticAlgorithm({self.best_scores[-1]}, " \
+                   f"'{self.graph.name}', {self.lowest_penalties[-1]}, " \
                    f"'{self.type}')"
 
     def generate_population(self, size):
@@ -73,42 +74,46 @@ class GeneticAlgorithm(Algorithm):
         new_population.sort(key=lambda x: (x.penalty, x.score), reverse=False)
         self.population = new_population
 
-    def run_algorithm(self, iterations):
+    def run_algorithm(self, iterations, console):
         for i in range(iterations):
             self.roulette_breeding(i)
             if i % 10 == 0 or i == iterations - 1:
-                print(f"Iteracja {i} - najlepszy osobnik:\nKara:"
-                      f"{self.population[0].penalty}\tLiczba kolorów:"
-                      f"{self.population[0].score}")
-            self.best_scores.append(self.population[0].score)
-            self.lowest_penalties.append(self.population[0].penalty)
+                text = f"Iteracja {i} - najlepszy osobnik:\nKara:"
+                f"{self.population[0].penalty}\tLiczba kolorów:"
+                f"{self.population[0].score}"
+            GuiConsole.append_test_to_console(self, console=console, text=text)
 
-    def save_charts(self):
-        fig, ax = plt.subplots(2, 1)
-        ax[0].set_title(f"Graf o liczbie wierzchołków: {self.graph.nodes}"
-                        f" i liczbie krawędzi: {self.graph.number_of_edges}")
-        ax[0].plot(self.best_scores)
-        ax[0].set_xlabel("Liczba iteracji")
-        ax[0].set_ylabel("Liczba kolorów")
-        ax[1].set_xlabel("Liczba iteracji")
-        ax[1].set_ylabel("Liczba punktów karnych")
-        ax[1].plot(self.lowest_penalties)
-        filename = str(Path(__file__).parent.parent) + \
-            (f"/saved_charts/{str(datetime.now())}.png")
-        fig.savefig(filename)
-        print(f"Wyeksportowano wykres do '{filename}'.")
+        self.best_scores.append(self.population[0].score)
+        self.lowest_penalties.append(self.population[0].penalty)
 
-    def export_results(self, filename, parameters):
-        try:
-            with open("exported_results/" + filename, 'w+') as f:
-                if parameters != "":
-                    for x, y in parameters.items():
-                        f.write("{}: {}\n".format(x, y))
-                f.write("\n\n")
-                for individual in self.population:
-                    f.write(str(individual))
-                    f.write('\n')
-            print(f"Wyeksportowano wyniki do 'exported_results/{filename}'.")
-            return True
-        except NotADirectoryError and FileNotFoundError:
-            return False
+
+def save_charts(self):
+    fig, ax = plt.subplots(2, 1)
+    ax[0].set_title(f"Graf o liczbie wierzchołków: {self.graph.nodes}"
+                    f" i liczbie krawędzi: {self.graph.number_of_edges}")
+    ax[0].plot(self.best_scores)
+    ax[0].set_xlabel("Liczba iteracji")
+    ax[0].set_ylabel("Liczba kolorów")
+    ax[1].set_xlabel("Liczba iteracji")
+    ax[1].set_ylabel("Liczba punktów karnych")
+    ax[1].plot(self.lowest_penalties)
+    filename = str(Path(__file__).parent.parent) + \
+               (f"/saved_charts/{str(datetime.now())}.png")
+    fig.savefig(filename)
+    print(f"Wyeksportowano wykres do '{filename}'.")
+
+
+def export_results(self, filename, parameters):
+    try:
+        with open("exported_results/" + filename, 'w+') as f:
+            if parameters != "":
+                for x, y in parameters.items():
+                    f.write("{}: {}\n".format(x, y))
+            f.write("\n\n")
+            for individual in self.population:
+                f.write(str(individual))
+                f.write('\n')
+        print(f"Wyeksportowano wyniki do 'exported_results/{filename}'.")
+        return True
+    except NotADirectoryError and FileNotFoundError:
+        return False

@@ -76,7 +76,7 @@ Now execute the following to install the necessary dependencies:
 
 You'll find a `.py` file there, typically `main.py`. You can run it with the command:
 
-    python main.py
+    python src/main.py 
 
 Please note that the virtual environment must still be active for this to work.
 
