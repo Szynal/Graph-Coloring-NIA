@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 import sys
 
-from PyQt5.QtCore import QDateTime, Qt, QTimer
+from PyQt5.QtCore import QDateTime, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QComboBox, QDateTimeEdit,
-                             QDial, QDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-                             QProgressBar, QRadioButton, QScrollBar, QSizePolicy,
-                             QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit,
-                             QVBoxLayout, QWidget, QMessageBox, QPushButton, QFileDialog)
+                             QDial, QDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QRadioButton, QScrollBar,
+                             QSlider, QSpinBox, QStyleFactory, QTabWidget, QTextEdit,
+                             QVBoxLayout, QMessageBox, QPushButton, QFileDialog)
 
 from gui.description import GuiProjectDescription
 from gui.error_message import GuiShowErrorMsg
 from gui.console import GuiConsole
+from gui.progress_bar import ProgressBar
 
 from graph import Graph
 from genetic_algorithm import GeneticAlgorithm
@@ -33,6 +33,8 @@ class WidgetGallery(QDialog):
     number_of_generations_box = None
     radio_button_bruteforce = None
     radio_button_genetic = None
+    gui_description = None
+    progressBar = None
 
     def __init__(self, parent=None):
         super(WidgetGallery, self).__init__(parent)
@@ -43,15 +45,16 @@ class WidgetGallery(QDialog):
         self.tab_widget_group_box = QTabWidget()
         self.console_group_box = QTabWidget()
         self.original_palette = QApplication.palette()
-        self.progress_bar = QProgressBar()
         self.console_group_box = QGroupBox("Output Console")
 
         self.create_radio_buttons_widget()
         self.create_dataset_group_box()
         self.create_genetic_alg_widget()
-        self.create_description_widget()
+
+        GuiProjectDescription(self.tab_widget_group_box)
+
         self.createBottomRightGroupBox()
-        self.createProgressBar()
+        self.progressBar = ProgressBar()
 
         self.console = QTextEdit()
         GuiConsole.createConsole(self, self.console, self.console_group_box)
@@ -71,7 +74,7 @@ class WidgetGallery(QDialog):
         main_layout.addWidget(self.bottomRightGroupBox, 2, 1)
         main_layout.addWidget(self.radio_buttons_group_box, 3, 0)
         main_layout.addWidget(self.genetic_alg_group_box, 3, 1)
-        main_layout.addWidget(self.progress_bar, 4, 0, 1, 2)
+        main_layout.addWidget(self.progressBar.progress_bar, 4, 0, 1, 2)
         main_layout.addWidget(self.console_group_box, 5, 0, 1, 2)
         main_layout.addWidget(self.console_group_box, 0, 0, 1, 2)
 
@@ -92,11 +95,6 @@ class WidgetGallery(QDialog):
 
     def change_palette(self):
         QApplication.setPalette(self.original_palette)
-
-    def init_progress_bar(self):
-        progress_bar_cur_val = self.progress_bar.value()
-        progress_bar_max_val = self.progress_bar.maximum()
-        self.progress_bar.setValue(progress_bar_cur_val + (progress_bar_max_val - progress_bar_cur_val) // 100)
 
     def create_dataset_group_box(self):
         generate_dataset_button = QPushButton("Generate a dataset")
@@ -121,7 +119,10 @@ class WidgetGallery(QDialog):
 
     def create_radio_buttons_widget(self):
         self.radio_button_bruteforce = QRadioButton("Brute force")
+        self.radio_button_bruteforce.clicked.connect(self.radio_button_bruteforce_clicked)
+
         self.radio_button_genetic = QRadioButton("Genetic")
+        self.radio_button_genetic.clicked.connect(self.radio_button_genetic_clicked)
         self.radio_button_bruteforce.setChecked(True)
 
         layout = QVBoxLayout()
@@ -130,10 +131,23 @@ class WidgetGallery(QDialog):
         layout.addStretch(1)
         self.radio_buttons_group_box.setLayout(layout)
 
+    def radio_button_bruteforce_clicked(self):
+        self.radio_button_bruteforce.setChecked(True)
+        self.radio_button_genetic.setChecked(False)
+        self.population_size_box.setEnabled(False)
+        self.number_of_generations_box.setEnabled(False)
+
+    def radio_button_genetic_clicked(self):
+        self.radio_button_bruteforce.setChecked(False)
+        self.radio_button_genetic.setChecked(True)
+        self.population_size_box.setEnabled(True)
+        self.number_of_generations_box.setEnabled(True)
+
     def create_genetic_alg_widget(self):
 
-        run_genetic_alg_button = QPushButton("Run Genetic Algorithm")
-        run_genetic_alg_button.setDefault(True)
+        run_alg_button = QPushButton("Run Algorithm")
+        run_alg_button.setMinimumSize(200, 30)
+        run_alg_button.setDefault(True)
 
         population_size_label = QLabel(self.genetic_alg_group_box)
         population_size_label.setText("Population size:")
@@ -142,6 +156,7 @@ class WidgetGallery(QDialog):
         self.population_size_box.setMinimum(10)
         self.population_size_box.setMaximum(100000)
         self.population_size_box.setValue(100)
+        self.population_size_box.setEnabled(False)
 
         number_of_generations_label = QLabel(self.genetic_alg_group_box)
         number_of_generations_label.setText("Number of generations:")
@@ -150,6 +165,7 @@ class WidgetGallery(QDialog):
         self.number_of_generations_box.setMinimum(10)
         self.number_of_generations_box.setMaximum(100000)
         self.number_of_generations_box.setValue(50)
+        self.number_of_generations_box.setEnabled(False)
 
         layout = QGridLayout()
         layout.addWidget(population_size_label, 0, 0, 1, 2)
@@ -158,10 +174,10 @@ class WidgetGallery(QDialog):
         layout.addWidget(number_of_generations_label, 1, 0, 1, 2)
         layout.addWidget(self.number_of_generations_box, 1, 1, 1, 2)
 
-        layout.addWidget(run_genetic_alg_button, 2, 0)
+        layout.addWidget(run_alg_button, 2, 0)
         layout.setRowStretch(3, 1)
 
-        run_genetic_alg_button.clicked.connect(self.run_genetic_alg_button_clicked)
+        run_alg_button.clicked.connect(self.run_alg_button_clicked)
         self.genetic_alg_group_box.setLayout(layout)
 
     def load_graph_button_clicked(self):
@@ -185,9 +201,10 @@ class WidgetGallery(QDialog):
         if self.graph is None:
             GuiShowErrorMsg.show_error_msg('Error', "Graph not found. Load the graph to display it properly.")
         else:
+            self.console.clear()
             GuiConsole.append_test_to_console(self, self.console, self.graph)
 
-    def run_genetic_alg_button_clicked(self):
+    def run_alg_button_clicked(self):
 
         if self.graph is None:
             GuiShowErrorMsg.show_error_msg('Error', "Graph not found. Load the graph to display it properly.")
@@ -196,7 +213,6 @@ class WidgetGallery(QDialog):
                 print("radio_button_genetic isChecked")
                 self.run_genetic_algorithm()
             else:
-                print("run_brute_force_algorithm ")
                 self.run_brute_force_algorithm()
 
     def run_genetic_algorithm(self):
@@ -210,33 +226,15 @@ class WidgetGallery(QDialog):
         except ValueError:
             number_of_generations = 50
         self.console.clear()
+        self.console.append("run genetic algorithm ")
         genetic_algorithm.generate_population(population_size)
         genetic_algorithm.run_algorithm(number_of_generations, self.console)
 
     def run_brute_force_algorithm(self):
+        self.console.clear()
+        self.console.append("run brute force algorithm ")
         brute_force_algorithm = BruteForceAlgorithm(self.graph)
         brute_force_algorithm.run_algorithm(self.console)
-
-    def create_description_widget(self):
-        self.tab_widget_group_box.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Ignored)
-        tab2 = QWidget()
-        text_edit = QTextEdit()
-        text_edit.setPlainText(GuiProjectDescription.get_project_description())
-        text_edit.setReadOnly(True)
-        tab2box = QHBoxLayout()
-        tab2box.setContentsMargins(5, 5, 5, 5)
-        tab2box.addWidget(text_edit)
-        tab2.setLayout(tab2box)
-        self.tab_widget_group_box.addTab(tab2, "Project Description")
-
-        authors_widget = QWidget()
-        authors_label = QLabel()
-        authors_label.setText(GuiProjectDescription.get_project_authors())
-        authors_box = QHBoxLayout()
-        authors_box.setContentsMargins(5, 5, 5, 5)
-        authors_box.addWidget(authors_label)
-        authors_widget.setLayout(authors_box)
-        self.tab_widget_group_box.addTab(authors_widget, "Authors")
 
     def createBottomRightGroupBox(self):
         self.bottomRightGroupBox = QGroupBox("TODO  asd TEST")
@@ -267,14 +265,6 @@ class WidgetGallery(QDialog):
         layout.addWidget(dial, 2, 1, 2, 1)
         layout.setRowStretch(4, 1)
         self.bottomRightGroupBox.setLayout(layout)
-
-    def createProgressBar(self):
-        self.progress_bar.setRange(0, 10000)
-        self.progress_bar.setValue(0)
-
-        timer = QTimer(self)
-        timer.timeout.connect(self.init_progress_bar)
-        timer.start(1000)
 
 
 if __name__ == '__main__':
