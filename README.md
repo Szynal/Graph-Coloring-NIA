@@ -80,6 +80,9 @@ You'll find a `.py` file there, typically `main.py`. You can run it with the com
 
 Please note that the virtual environment must still be active for this to work.
 
+## Preview Images:
+
+![Alt text](other/app.jpg?raw=true "Title")
 
 ## Using PySide2
 
