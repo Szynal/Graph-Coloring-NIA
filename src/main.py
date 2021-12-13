@@ -15,6 +15,7 @@ from gui.console import GuiConsole
 
 from graph import Graph
 from genetic_algorithm import GeneticAlgorithm
+from brute_force_algorithm import BruteForceAlgorithm
 
 
 class WidgetGallery(QDialog):
@@ -30,6 +31,8 @@ class WidgetGallery(QDialog):
     console = None
     population_size_box = None
     number_of_generations_box = None
+    radio_button_bruteforce = None
+    radio_button_genetic = None
 
     def __init__(self, parent=None):
         super(WidgetGallery, self).__init__(parent)
@@ -117,15 +120,13 @@ class WidgetGallery(QDialog):
         self.dataset_group_box.setLayout(layout)
 
     def create_radio_buttons_widget(self):
-        radio_button1 = QRadioButton("Radio button 1")
-        radio_button2 = QRadioButton("Radio button 2")
-        radio_button3 = QRadioButton("Radio button 3")
-        radio_button1.setChecked(True)
+        self.radio_button_bruteforce = QRadioButton("Brute force")
+        self.radio_button_genetic = QRadioButton("Genetic")
+        self.radio_button_bruteforce.setChecked(True)
 
         layout = QVBoxLayout()
-        layout.addWidget(radio_button1)
-        layout.addWidget(radio_button2)
-        layout.addWidget(radio_button3)
+        layout.addWidget(self.radio_button_bruteforce)
+        layout.addWidget(self.radio_button_genetic)
         layout.addStretch(1)
         self.radio_buttons_group_box.setLayout(layout)
 
@@ -191,18 +192,30 @@ class WidgetGallery(QDialog):
         if self.graph is None:
             GuiShowErrorMsg.show_error_msg('Error', "Graph not found. Load the graph to display it properly.")
         else:
-            alg = GeneticAlgorithm(self.graph)
-            try:
-                population_size = int(self.population_size_box.value())
-            except ValueError:
-                population_size = 100
-            try:
-                number_of_generations = int(self.number_of_generations_box.value())
-            except ValueError:
-                number_of_generations = 50
-            self.console.clear()
-            alg.generate_population(population_size)
-            alg.run_algorithm(number_of_generations, self.console)
+            if self.radio_button_genetic.isChecked():
+                print("radio_button_genetic isChecked")
+                self.run_genetic_algorithm()
+            else:
+                print("run_brute_force_algorithm ")
+                self.run_brute_force_algorithm()
+
+    def run_genetic_algorithm(self):
+        genetic_algorithm = GeneticAlgorithm(self.graph)
+        try:
+            population_size = int(self.population_size_box.value())
+        except ValueError:
+            population_size = 100
+        try:
+            number_of_generations = int(self.number_of_generations_box.value())
+        except ValueError:
+            number_of_generations = 50
+        self.console.clear()
+        genetic_algorithm.generate_population(population_size)
+        genetic_algorithm.run_algorithm(number_of_generations, self.console)
+
+    def run_brute_force_algorithm(self):
+        brute_force_algorithm = BruteForceAlgorithm(self.graph)
+        brute_force_algorithm.run_algorithm(self.console)
 
     def create_description_widget(self):
         self.tab_widget_group_box.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Ignored)
