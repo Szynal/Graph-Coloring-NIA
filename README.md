@@ -12,7 +12,7 @@ The dataset for testing (graphs) is stored in the "graphs" folder. You can gener
 
 ## Running 
 
-The program works in terminal (console version). The GUI  is under development. Please run the script with "menu.py"
+Please run the script with "main.py"
 
 Running is really easy. The only thing you need is [Python 3](https://www.python.org/downloads/).
 
