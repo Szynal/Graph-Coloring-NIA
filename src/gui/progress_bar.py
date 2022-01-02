@@ -23,3 +23,4 @@ class ProgressBar(object):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.init_progress_bar)
         self.timer.start(time)
+
