@@ -43,19 +43,19 @@ class Individual:
                     self.penalty += 1
         self.score = len(np.unique(self.genotype))
 
-    def breeding(self, ind_a, ind_b, graph):
+    def breeding(self, ind_a, ind_b, graph, mutation_rate):
         for i in range(len(self.genotype)):
             if i < len(self.genotype) / 2:
                 self.genotype[i] = ind_a.genotype[i]
             else:
                 self.genotype[i] = ind_b.genotype[i]
-        self.mutate()
+        self.mutate(mutation_rate)
         self.correct_genotype(graph)
         self.generate_tag()
 
-    def mutate(self):
+    def mutate(self, mutation_rate):
         for i in range(len(self.genotype)):
-            if random.uniform(0, 1) < 0.05:
+            if random.uniform(0, 1) <  mutation_rate:
                 self.genotype[i] = random.randint(0, np.max(self.genotype))
 
     def generate_tag(self):

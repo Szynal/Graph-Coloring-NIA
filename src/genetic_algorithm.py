@@ -32,11 +32,11 @@ class GeneticAlgorithm(Algorithm):
             individual.generate_genotype(self.graph)
             self.population.append(individual)
 
-    def roulette_breeding(self, iteration):
+    def roulette_breeding(self, iteration, mutation_rate=0.05, crossing_rate=0.85):
         total_score = 0
         total_penalty = 0
-        copied_size = floor(0.15 * len(self.population))
-        bred_size = ceil(0.85 * len(self.population))
+        copied_size = floor(1-crossing_rate * len(self.population))
+        bred_size = ceil(crossing_rate * len(self.population))
         if bred_size % 2 == 1:
             copied_size += 1
             bred_size -= 1
@@ -64,8 +64,8 @@ class GeneticAlgorithm(Algorithm):
                     break
             ind_a = Individual(self.graph)
             ind_b = Individual(self.graph)
-            ind_a.breeding(parents[0], parents[1], self.graph)
-            ind_b.breeding(parents[1], parents[0], self.graph)
+            ind_a.breeding(parents[0], parents[1], self.graph, mutation_rate)
+            ind_b.breeding(parents[1], parents[0], self.graph, mutation_rate)
             ind_a.iteration = iteration
             ind_b.iteration = iteration
             new_population.append(ind_a)
@@ -74,9 +74,9 @@ class GeneticAlgorithm(Algorithm):
         new_population.sort(key=lambda x: (x.penalty, x.score), reverse=False)
         self.population = new_population
 
-    def run_algorithm(self, iterations, console):
+    def run_algorithm(self, iterations, console, mutation_rate=0.05, crossing_rate=0.85):
         for i in range(iterations):
-            self.roulette_breeding(i)
+            self.roulette_breeding(i, mutation_rate, crossing_rate)
             if i % 10 == 0 or i == iterations - 1:
                 text = (f"Iteracja {i} \nNajlepszy osobnik:\n {self.population[0].genotype}\nKara:"
                         f"{self.population[0].penalty}\tLiczba kolorów:"
