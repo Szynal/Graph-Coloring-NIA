@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QComboBox, QDateTimeEdit,
                              QDial, QDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QRadioButton, QScrollBar,
                              QSlider, QSpinBox, QStyleFactory, QTabWidget, QTextEdit,
-                             QVBoxLayout, QMessageBox, QPushButton, QFileDialog)
+                             QVBoxLayout, QMessageBox, QPushButton, QFileDialog, QDoubleSpinBox)
 
 from gui.description import GuiProjectDescription
 from gui.error_message import GuiShowErrorMsg
@@ -36,9 +36,13 @@ class WidgetGallery(QDialog):
     gui_description = None
     progressBar = None
 
+    mutation_rate_spin_box = None
+    crossing_rate_spin_box = None
+
     def __init__(self, parent=None):
         super(WidgetGallery, self).__init__(parent)
 
+        self.mutation_group_box = QGroupBox("Crossing settings")
         self.dataset_group_box = QGroupBox("Dataset")
         self.radio_buttons_group_box = QGroupBox("Choose algorithm")
         self.genetic_alg_group_box = QGroupBox("Genetic Algorithm")
@@ -53,7 +57,7 @@ class WidgetGallery(QDialog):
 
         GuiProjectDescription(self.tab_widget_group_box)
 
-        self.createBottomRightGroupBox()
+        self.create_mutation_group_box()
         self.progressBar = ProgressBar()
 
         self.console = QTextEdit()
@@ -71,7 +75,7 @@ class WidgetGallery(QDialog):
         main_layout.addLayout(top_layout, 1, 0, 1, 2)
 
         main_layout.addWidget(self.dataset_group_box, 2, 0)
-        main_layout.addWidget(self.bottomRightGroupBox, 2, 1)
+        main_layout.addWidget(self.mutation_group_box, 2, 1)
         main_layout.addWidget(self.radio_buttons_group_box, 3, 0)
         main_layout.addWidget(self.genetic_alg_group_box, 3, 1)
         main_layout.addWidget(self.progressBar.progress_bar, 4, 0, 1, 2)
@@ -236,35 +240,38 @@ class WidgetGallery(QDialog):
         brute_force_algorithm = BruteForceAlgorithm(self.graph)
         brute_force_algorithm.run_algorithm(self.console)
 
-    def createBottomRightGroupBox(self):
-        self.bottomRightGroupBox = QGroupBox("TODO  eksportowanie danych")
-        self.bottomRightGroupBox.setCheckable(True)
-        self.bottomRightGroupBox.setChecked(False)
+    def create_mutation_group_box(self):
 
-        spin_box = QSpinBox(self.bottomRightGroupBox)
-        spin_box.setValue(50)
+        mutation_rate_label = QLabel(self.mutation_group_box)
+        mutation_rate_label.setText("Mutation rate:")
 
-        date_time_edit = QDateTimeEdit(self.bottomRightGroupBox)
-        date_time_edit.setDateTime(QDateTime.currentDateTime())
+        self.mutation_rate_spin_box = QDoubleSpinBox(self.mutation_group_box)
+        self.mutation_rate_spin_box.setMinimum(0)
+        self.mutation_rate_spin_box.setMaximum(1)
+        self.mutation_rate_spin_box.setValue(0.05)
+        self.mutation_rate_spin_box.setEnabled(True)
 
-        slider = QSlider(Qt.Horizontal, self.bottomRightGroupBox)
-        slider.setValue(40)
+        crossing_rate_label = QLabel(self.mutation_group_box)
+        crossing_rate_label.setText("Crossing rate:")
 
-        scroll_bar = QScrollBar(Qt.Horizontal, self.bottomRightGroupBox)
-        scroll_bar.setValue(60)
-
-        dial = QDial(self.bottomRightGroupBox)
-        dial.setValue(30)
-        dial.setNotchesVisible(True)
+        self.crossing_rate_spin_box = QDoubleSpinBox(self.mutation_group_box)
+        self.crossing_rate_spin_box.setMinimum(0)
+        self.crossing_rate_spin_box.setMaximum(1)
+        self.crossing_rate_spin_box.setValue(0.85)
+        self.crossing_rate_spin_box.setEnabled(True)
 
         layout = QGridLayout()
-        layout.addWidget(spin_box, 0, 0, 1, 2)
-        layout.addWidget(date_time_edit, 1, 0, 1, 2)
-        layout.addWidget(slider, 2, 0)
-        layout.addWidget(scroll_bar, 3, 0)
-        layout.addWidget(dial, 2, 1, 2, 1)
+        layout.addWidget(self.mutation_rate_spin_box, 0, 0, 1, 2)
         layout.setRowStretch(4, 1)
-        self.bottomRightGroupBox.setLayout(layout)
+
+        layout = QGridLayout()
+        layout.addWidget(mutation_rate_label, 0, 0, 1, 2)
+        layout.addWidget(self.mutation_rate_spin_box, 0, 1, 1, 2)
+
+        layout.addWidget(crossing_rate_label, 1, 0, 1, 2)
+        layout.addWidget(self.crossing_rate_spin_box, 1, 1, 1, 2)
+
+        self.mutation_group_box.setLayout(layout)
 
 
 if __name__ == '__main__':

@@ -78,10 +78,10 @@ class GeneticAlgorithm(Algorithm):
         for i in range(iterations):
             self.roulette_breeding(i)
             if i % 10 == 0 or i == iterations - 1:
-                text = f"Iteracja {i} - najlepszy osobnik:\nKara:"
-                f"{self.population[0].penalty}\tLiczba kolorów:"
-                f"{self.population[0].score}"
-            GuiConsole.append_test_to_console(self, console=console, text=text)
+                text = (f"Iteracja {i} \nNajlepszy osobnik:\n {self.population[0].genotype}\nKara:"
+                        f"{self.population[0].penalty}\tLiczba kolorów:"
+                        f"{self.population[0].score}\n")
+                GuiConsole.append_test_to_console(self, console=console, text=text)
 
         self.best_scores.append(self.population[0].score)
         self.lowest_penalties.append(self.population[0].penalty)
