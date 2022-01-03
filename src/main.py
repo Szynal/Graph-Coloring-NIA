@@ -36,6 +36,7 @@ class WidgetGallery(QDialog):
     gui_description = None
     progressBar = None
 
+    genetic_algorithm = None
     mutation_rate_spin_box = None
     crossing_rate_spin_box = None
     export_group_box = None
@@ -231,7 +232,7 @@ class WidgetGallery(QDialog):
                 self.run_brute_force_algorithm()
 
     def run_genetic_algorithm(self):
-        genetic_algorithm = GeneticAlgorithm(self.graph)
+        self.genetic_algorithm = GeneticAlgorithm(self.graph)
         try:
             population_size = int(self.population_size_box.value())
         except ValueError:
@@ -252,8 +253,8 @@ class WidgetGallery(QDialog):
 
         self.console.clear()
         self.console.append("run genetic algorithm ")
-        genetic_algorithm.generate_population(population_size)
-        genetic_algorithm.run_algorithm(number_of_generations, self.console, mutation_rate, crossing_rate)
+        self.genetic_algorithm.generate_population(population_size)
+        self.genetic_algorithm.run_algorithm(number_of_generations, self.console, mutation_rate, crossing_rate)
         self.progressBar.progress_bar.setValue(10000)
 
     def run_brute_force_algorithm(self):
@@ -316,12 +317,10 @@ class WidgetGallery(QDialog):
         self.export_group_box.setLayout(layout)
 
     def export_results_button_clicked(self):
-
-        print("export_results_button_clicked")
+        self.genetic_algorithm.export_results("", self.console)
 
     def save_charts_button_clicked(self):
-
-        print("save_charts_button_clicked")
+        self.genetic_algorithm.save_charts(self.console)
 
 
 if __name__ == '__main__':

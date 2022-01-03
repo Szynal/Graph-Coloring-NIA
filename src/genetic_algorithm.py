@@ -35,7 +35,7 @@ class GeneticAlgorithm(Algorithm):
     def roulette_breeding(self, iteration, mutation_rate=0.05, crossing_rate=0.85):
         total_score = 0
         total_penalty = 0
-        copied_size = floor(1-crossing_rate * len(self.population))
+        copied_size = floor(1 - crossing_rate * len(self.population))
         bred_size = ceil(crossing_rate * len(self.population))
         if bred_size % 2 == 1:
             copied_size += 1
@@ -86,36 +86,35 @@ class GeneticAlgorithm(Algorithm):
         self.best_scores.append(self.population[0].score)
         self.lowest_penalties.append(self.population[0].penalty)
 
+    def save_charts(self, console):
+        fig, ax = plt.subplots(2, 1)
+        ax[0].set_title(f"Graf o liczbie wierzchołków: {self.graph.nodes}"
+                        f" i liczbie krawędzi: {self.graph.number_of_edges}")
+        ax[0].plot(self.best_scores)
+        ax[0].set_xlabel("Liczba iteracji")
+        ax[0].set_ylabel("Liczba kolorów")
+        ax[1].set_xlabel("Liczba iteracji")
+        ax[1].set_ylabel("Liczba punktów karnych")
+        ax[1].plot(self.lowest_penalties)
+        filename = str(Path(__file__).parent.parent) + \
+                   (f"/saved_charts/{str(datetime.now())}.png")
+        fig.savefig(filename)
+        GuiConsole.append_test_to_console(self, console=console, text=f"Wyeksportowano wykres do '{filename}'.")
 
-def save_charts(self, console):
-    fig, ax = plt.subplots(2, 1)
-    ax[0].set_title(f"Graf o liczbie wierzchołków: {self.graph.nodes}"
-                    f" i liczbie krawędzi: {self.graph.number_of_edges}")
-    ax[0].plot(self.best_scores)
-    ax[0].set_xlabel("Liczba iteracji")
-    ax[0].set_ylabel("Liczba kolorów")
-    ax[1].set_xlabel("Liczba iteracji")
-    ax[1].set_ylabel("Liczba punktów karnych")
-    ax[1].plot(self.lowest_penalties)
-    filename = str(Path(__file__).parent.parent) + \
-               (f"/saved_charts/{str(datetime.now())}.png")
-    fig.savefig(filename)
-    GuiConsole.append_test_to_console(self, console=console, text=f"Wyeksportowano wykres do '{filename}'.")
-
-
-def export_results(self, parameters, console):
-    filename = str(Path(__file__).parent.parent) + \
-               (f"/exported_results/{str(datetime.now())}.png")
-    try:
-        with open("exported_results/" + filename, 'w+') as f:
-            if parameters != "":
-                for x, y in parameters.items():
-                    f.write("{}: {}\n".format(x, y))
-            f.write("\n\n")
-            for individual in self.population:
-                f.write(str(individual))
-                f.write('\n')
-        GuiConsole.append_test_to_console(self, console=console, text=f"Wyeksportowano wyniki do 'exported_results/{filename}'.")
-        return True
-    except NotADirectoryError and FileNotFoundError:
-        return False
+    def export_results(self, parameters, console):
+        filename = str(Path(__file__).parent.parent) + \
+                   f"/exported_results/{str(datetime.now())}.png"
+        try:
+            with open("exported_results/" + filename, 'w+') as f:
+                if parameters != "":
+                    for x, y in parameters.items():
+                        f.write("{}: {}\n".format(x, y))
+                f.write("\n\n")
+                for individual in self.population:
+                    f.write(str(individual))
+                    f.write('\n')
+            GuiConsole.append_test_to_console(self, console=console,
+                                              text=f"Wyeksportowano wyniki do 'exported_results/{filename}'.")
+            return True
+        except NotADirectoryError and FileNotFoundError:
+            return False
