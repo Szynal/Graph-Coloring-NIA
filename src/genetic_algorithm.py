@@ -35,7 +35,7 @@ class GeneticAlgorithm(Algorithm):
     def roulette_breeding(self, iteration, mutation_rate=0.05, crossing_rate=0.85):
         total_score = 0
         total_penalty = 0
-        copied_size = floor(1 - crossing_rate * len(self.population))
+        copied_size = floor((1 - crossing_rate) * len(self.population))
         bred_size = ceil(crossing_rate * len(self.population))
         if bred_size % 2 == 1:
             copied_size += 1
@@ -74,6 +74,7 @@ class GeneticAlgorithm(Algorithm):
         new_population.sort(key=lambda x: (x.penalty, x.score), reverse=False)
         self.population = new_population
 
+
     def run_algorithm(self, iterations, console, mutation_rate=0.05, crossing_rate=0.85):
         for i in range(iterations):
             self.roulette_breeding(i, mutation_rate, crossing_rate)
@@ -83,8 +84,8 @@ class GeneticAlgorithm(Algorithm):
                         f"{self.population[0].score}\n")
                 GuiConsole.append_test_to_console(self, console=console, text=text)
 
-        self.best_scores.append(self.population[0].score)
-        self.lowest_penalties.append(self.population[0].penalty)
+            self.best_scores.append(self.population[0].score)
+            self.lowest_penalties.append(self.population[0].penalty)
 
     def save_charts(self, console):
         fig, ax = plt.subplots(2, 1)
@@ -95,6 +96,7 @@ class GeneticAlgorithm(Algorithm):
         ax[0].set_ylabel("Liczba kolorów")
         ax[1].set_xlabel("Liczba iteracji")
         ax[1].set_ylabel("Liczba punktów karnych")
+        ax[1].ylim(bottom=0)
         ax[1].plot(self.lowest_penalties)
         filename = str(Path(__file__).parent.parent) + \
                    (f"/saved_charts/{str(datetime.now())}.png")
