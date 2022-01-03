@@ -210,6 +210,7 @@ class WidgetGallery(QDialog):
 
     def run_alg_button_clicked(self):
 
+        self.progressBar.progress_bar.setValue(0)
         if self.graph is None:
             GuiShowErrorMsg.show_error_msg('Error', "Graph not found. Load the graph to display it properly.")
         else:
@@ -229,10 +230,21 @@ class WidgetGallery(QDialog):
             number_of_generations = int(self.number_of_generations_box.value())
         except ValueError:
             number_of_generations = 50
+
+        try:
+            crossing_rate = float(self.crossing_rate_spin_box.value())
+        except ValueError:
+            crossing_rate = 0.85
+        try:
+            mutation_rate = float(self.mutation_rate_spin_box.value())
+        except ValueError:
+            mutation_rate = 0.05
+
         self.console.clear()
         self.console.append("run genetic algorithm ")
         genetic_algorithm.generate_population(population_size)
-        genetic_algorithm.run_algorithm(number_of_generations, self.console)
+        genetic_algorithm.run_algorithm(number_of_generations, self.console, mutation_rate, crossing_rate)
+        self.progressBar.progress_bar.setValue(10000)
 
     def run_brute_force_algorithm(self):
         self.console.clear()
