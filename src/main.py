@@ -147,16 +147,12 @@ class WidgetGallery(QDialog):
         self.radio_button_genetic.setChecked(False)
         self.population_size_box.setEnabled(False)
         self.number_of_generations_box.setEnabled(False)
-        self.export_results_button.setEnabled(False)
-        self.save_charts_button.setEnabled(False)
 
     def radio_button_genetic_clicked(self):
         self.radio_button_bruteforce.setChecked(False)
         self.radio_button_genetic.setChecked(True)
         self.population_size_box.setEnabled(True)
         self.number_of_generations_box.setEnabled(True)
-        self.export_results_button.setEnabled(True)
-        self.save_charts_button.setEnabled(True)
 
     def create_genetic_alg_widget(self):
 
@@ -226,9 +222,12 @@ class WidgetGallery(QDialog):
             GuiShowErrorMsg.show_error_msg('Error', "Graph not found. Load the graph to display it properly.")
         else:
             if self.radio_button_genetic.isChecked():
-                print("radio_button_genetic isChecked")
+                self.export_results_button.setEnabled(True)
+                self.save_charts_button.setEnabled(True)
                 self.run_genetic_algorithm()
             else:
+                self.export_results_button.setEnabled(False)
+                self.save_charts_button.setEnabled(False)
                 self.run_brute_force_algorithm()
 
     def run_genetic_algorithm(self):
@@ -262,6 +261,7 @@ class WidgetGallery(QDialog):
         self.console.append("run brute force algorithm ")
         brute_force_algorithm = BruteForceAlgorithm(self.graph)
         brute_force_algorithm.run_algorithm(self.console)
+        self.progressBar.progress_bar.setValue(10000)
 
     def create_mutation_group_box(self):
 
@@ -316,9 +316,11 @@ class WidgetGallery(QDialog):
         self.export_group_box.setLayout(layout)
 
     def export_results_button_clicked(self):
+
         print("export_results_button_clicked")
 
     def save_charts_button_clicked(self):
+
         print("save_charts_button_clicked")
 
 
