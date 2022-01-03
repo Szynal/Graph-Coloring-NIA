@@ -40,6 +40,9 @@ class WidgetGallery(QDialog):
     crossing_rate_spin_box = None
     export_group_box = None
 
+    export_results_button = None
+    save_charts_button = None
+
     def __init__(self, parent=None):
         super(WidgetGallery, self).__init__(parent)
 
@@ -56,6 +59,7 @@ class WidgetGallery(QDialog):
         self.create_radio_buttons_widget()
         self.create_dataset_group_box()
         self.create_genetic_alg_widget()
+        self.create_exporting_widget()
 
         GuiProjectDescription(self.tab_widget_group_box)
 
@@ -143,12 +147,16 @@ class WidgetGallery(QDialog):
         self.radio_button_genetic.setChecked(False)
         self.population_size_box.setEnabled(False)
         self.number_of_generations_box.setEnabled(False)
+        self.export_results_button.setEnabled(False)
+        self.save_charts_button.setEnabled(False)
 
     def radio_button_genetic_clicked(self):
         self.radio_button_bruteforce.setChecked(False)
         self.radio_button_genetic.setChecked(True)
         self.population_size_box.setEnabled(True)
         self.number_of_generations_box.setEnabled(True)
+        self.export_results_button.setEnabled(True)
+        self.save_charts_button.setEnabled(True)
 
     def create_genetic_alg_widget(self):
 
@@ -287,6 +295,31 @@ class WidgetGallery(QDialog):
         layout.addWidget(self.crossing_rate_spin_box, 1, 1, 1, 2)
 
         self.mutation_group_box.setLayout(layout)
+
+    def create_exporting_widget(self):
+        self.export_results_button = QPushButton("Export results")
+        self.export_results_button.setDefault(True)
+        self.export_results_button.setEnabled(False)
+
+        self.save_charts_button = QPushButton("Save charts")
+        self.save_charts_button.setDefault(True)
+        self.save_charts_button.setEnabled(False)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.export_results_button)
+        layout.addWidget(self.save_charts_button)
+
+        self.export_results_button.clicked.connect(self.export_results_button_clicked)
+        self.save_charts_button.clicked.connect(self.save_charts_button_clicked)
+
+        layout.addStretch(1)
+        self.export_group_box.setLayout(layout)
+
+    def export_results_button_clicked(self):
+        print("export_results_button_clicked")
+
+    def save_charts_button_clicked(self):
+        print("save_charts_button_clicked")
 
 
 if __name__ == '__main__':
