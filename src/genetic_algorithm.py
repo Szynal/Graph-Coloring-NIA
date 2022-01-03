@@ -87,7 +87,7 @@ class GeneticAlgorithm(Algorithm):
         self.lowest_penalties.append(self.population[0].penalty)
 
 
-def save_charts(self):
+def save_charts(self, console):
     fig, ax = plt.subplots(2, 1)
     ax[0].set_title(f"Graf o liczbie wierzchołków: {self.graph.nodes}"
                     f" i liczbie krawędzi: {self.graph.number_of_edges}")
@@ -100,10 +100,12 @@ def save_charts(self):
     filename = str(Path(__file__).parent.parent) + \
                (f"/saved_charts/{str(datetime.now())}.png")
     fig.savefig(filename)
-    print(f"Wyeksportowano wykres do '{filename}'.")
+    GuiConsole.append_test_to_console(self, console=console, text=f"Wyeksportowano wykres do '{filename}'.")
 
 
-def export_results(self, filename, parameters):
+def export_results(self, parameters, console):
+    filename = str(Path(__file__).parent.parent) + \
+               (f"/exported_results/{str(datetime.now())}.png")
     try:
         with open("exported_results/" + filename, 'w+') as f:
             if parameters != "":
@@ -113,7 +115,7 @@ def export_results(self, filename, parameters):
             for individual in self.population:
                 f.write(str(individual))
                 f.write('\n')
-        print(f"Wyeksportowano wyniki do 'exported_results/{filename}'.")
+        GuiConsole.append_test_to_console(self, console=console, text=f"Wyeksportowano wyniki do 'exported_results/{filename}'.")
         return True
     except NotADirectoryError and FileNotFoundError:
         return False
