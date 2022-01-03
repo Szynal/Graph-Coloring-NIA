@@ -105,9 +105,9 @@ class GeneticAlgorithm(Algorithm):
 
     def export_results(self, parameters, console):
         filename = str(Path(__file__).parent.parent) + \
-                   f"/exported_results/{str(datetime.now())}.png"
+                   f"/exported_results/{str(datetime.now())}.txt"
         try:
-            with open("exported_results/" + filename, 'w+') as f:
+            with open(filename, 'w+') as f:
                 if parameters != "":
                     for x, y in parameters.items():
                         f.write("{}: {}\n".format(x, y))
