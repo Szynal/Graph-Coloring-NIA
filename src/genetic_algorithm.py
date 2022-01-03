@@ -96,7 +96,7 @@ class GeneticAlgorithm(Algorithm):
         ax[0].set_ylabel("Liczba kolorów")
         ax[1].set_xlabel("Liczba iteracji")
         ax[1].set_ylabel("Liczba punktów karnych")
-        ax[1].ylim(bottom=0)
+
         ax[1].plot(self.lowest_penalties)
         filename = str(Path(__file__).parent.parent) + \
                    (f"/saved_charts/{str(datetime.now())}.png")
