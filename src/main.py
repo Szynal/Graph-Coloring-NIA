@@ -38,6 +38,7 @@ class WidgetGallery(QDialog):
 
     mutation_rate_spin_box = None
     crossing_rate_spin_box = None
+    export_group_box = None
 
     def __init__(self, parent=None):
         super(WidgetGallery, self).__init__(parent)
@@ -50,6 +51,7 @@ class WidgetGallery(QDialog):
         self.console_group_box = QTabWidget()
         self.original_palette = QApplication.palette()
         self.console_group_box = QGroupBox("Output Console")
+        self.export_group_box = QGroupBox("Exporting")
 
         self.create_radio_buttons_widget()
         self.create_dataset_group_box()
@@ -79,7 +81,8 @@ class WidgetGallery(QDialog):
         main_layout.addWidget(self.radio_buttons_group_box, 3, 0)
         main_layout.addWidget(self.genetic_alg_group_box, 3, 1)
         main_layout.addWidget(self.progressBar.progress_bar, 4, 0, 1, 2)
-        main_layout.addWidget(self.console_group_box, 5, 0, 1, 2)
+        main_layout.addWidget(self.export_group_box, 5, 0, 1, 2)
+        main_layout.addWidget(self.console_group_box, 6, 0, 1, 2)
         main_layout.addWidget(self.console_group_box, 0, 0, 1, 2)
 
         main_layout.setRowStretch(1, 1)
